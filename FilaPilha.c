@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "FilaPilha.h"
 
 //Structs
 
 
 typedef struct Node{
-    char dado;
+    char dado[10];
     struct Node *prox;
 }node;
 
@@ -28,17 +29,17 @@ node* inicializaPilha(){
 }
 
 int pilhaVazia(node *pilha){
-    if(pilha->prox == NULL)
+    if(pilha == NULL)
          return 1;
     else
         return 0;
 }
 
-void push(node *p, char elemento){
+void push(node *p, char elemento[10]){
     node *novo;
     novo = (node *)malloc(sizeof(node));
 
-    novo->dado = elemento;
+    strcpy(novo->dado, elemento);
     novo->prox = NULL;
 
     if(p->prox == NULL){
@@ -92,11 +93,11 @@ else
     return 0;
 }
 
-void enqueue(fila *f, char elemento){
+void enqueue(fila *f, char elemento[10]){
     node *novo;
     novo = (node*)malloc(sizeof(node));
 
-    novo->dado = elemento;
+    strcpy(novo->dado, elemento);
     novo->prox = NULL;
     if(f->ini == NULL){ //verifica se a lista não estava vazia antes
         f->ini = novo;
