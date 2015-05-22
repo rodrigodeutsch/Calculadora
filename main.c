@@ -3,23 +3,22 @@
 #include <string.h>
 #include "FilaPilha.h"
 
-/// protótipos
+/// protÃ³tipos
 
-void conversor(fila *f, node *pilha, fila *filaTokens); //converte de infix para pós fixada
-int calculaResultado(fila *f, node *pilha); //calcula o resultado da equação pós fixada
+void conversor(fila *f, node *pilha); //converte de infix para pÃ³s fixada
+int calculaResultado(fila *f, node *pilha); //calcula o resultado da equaÃ§Ã£o pÃ³s fixada
 
 ///main
 
 int main(){
     node *pilha;
-    fila *f, *filaTokens;
+    fila *f;
     int resultado = 0;
 
     f = inicializaFila();
-    filaTokens = inicializaFila();
     pilha = inicializaPilha();
 
-    conversor(f, pilha, filaTokens);
+    conversor(f, pilha);
     resultado = calculaResultado(f, pilha);
 
     printf("\nO resultado eh: %d\n", resultado);
@@ -27,137 +26,105 @@ int main(){
     return 0;
 }
 
-/// funções
+/// funÃ§Ãµes
 
-void conversor(fila *f, node *pilha, fila *filaTokens){
-    char token[10];
+void conversor(fila *f, node *pilha){
+    char token;
     char aux;
-    int i=0, j=0, cont=0;
-    char equacao[50]; //equação matematica
-    char tokenAuxiliar[10];
+    int i=0;
+    char equacao[50]; //equaÃ§Ã£o matematica
 
     printf("\n Entre com a equacao matematica desejada(deixe um espaco entre cada caracter e feche todos parenteses):\n");
-    fgets(equacao,49,stdin); //lê equação
+    fgets(equacao,49,stdin); //lÃª equaÃ§Ã£o
 
-    ///for que armazena cada token em uma posição da fila "filaTokens"
-    for(i=cont;i<strlen(equacao)-1;i++){
-        if(token == ' '){ //se tiver espaço em branco, passa automaticamente pra posição da frente
-            while(token == ' '){ //resolve o problema de espaços consecutivos
+    for(i=0;i<strlen(equacao)-1;i++){
+    token = equacao[i]; //pega caracter por carater como token
+        if(token == ' '){ //se tiver espaÃ§o em branco, passa automaticamente pra posiÃ§Ã£o da frente
+            while(token == ' '){ //resolve o problema de espaÃ§os consecutivos
                 i++;
+                token  = equacao[i];//pega o token que nÃ£o Ã© espaÃ§o em branco
             }
         }
-        else{
-            do{
-            tokenAuxiliar[j] = equacao[i];//pega o token que não é espaço em branco
-            j++;
-            i++;
-            }while(token!= ' ');
-
-            ///tokenAuxiliar[strlen(tokenAuxiliar)+1] = '\0';
-            enqueue(filaTokens, tokenAuxiliar);
+        if(((token == '*' || token == '/') || (token == '+' || token == '-')) && (token != '(' || token != ')')){
+            while(!pilhaVazia(pilha) && ((top(pilha) == '*' || top(pilha) == '/' || top(pilha) == '-' || top(pilha) == '+') && ((token == '+' || token == '-') || (token == '*' || token == '/')))){
+                //aux = 0; //atribui NULL ao auxiliar
+                aux = top(pilha); //passa topo da pilha para aux
+                pop(pilha); //tira topo da pilha
+                enqueue(f, aux); //coloca aux na fila
+            }
+            push(pilha, token); //coloca na pilha o token que nÃ£o caiu no if
         }
-        j=0;
-        cont=i;
-    }
-
-    while(!filaVazia(filaTokens)){
-        strcpy(token, dequeue(filaTokens));
-        if((token != '*' && token != '/'  && token != '+' && token != '-') && token != '(' && token != ')'){
-            while(!pilhaVazia(pilha) && ((strcmp(top(pilha), '*') || strcmp(top(pilha), '/')) && (strcmp(token, '+') || strcmp(token, '-') || (strcmp(token, '*') || strcmp(token, '/'))))){
-            enqueue(f, top(pilha));
-            pop(pilha);
-        }
-        push(pilha, token);
-        }
-        else if((strcmp(token, '(')) == 0 || strcmp(token, ')')){
-            if (strcmp(token, ')') == 0){
-                while(strcmp(top(pilha), '(')){
-                        enqueue(f, top(pilha));
-                        pop(pilha);
+        else if(token == '(' || token == ')'){ //verifica parenteses
+                if(token == ')'){
+                    while(top(pilha) != '('){ //nao para atÃ© chegar no fim do parenteses
+                        aux = top(pilha); //atribui o topo da pilha a aux
+                        pop(pilha); //tira o topo da pilha
+                        enqueue(f, aux); //coloca aux na fila
+                    }
+                pop(pilha); // quando achar o fecha parenteses, tira ele da pilha
                 }
-            pop(pilha);
-            }
-            else{ //é abre parenteses
-                push(pilha, token);
-            }
+                else{
+                    push(pilha, token);
+                }
         }
         else{
-            enqueue(f, token);
+            enqueue(f, token); //coloca token que nÃ£o cai em nenhum if na fila
         }
-
     }
-    enqueue(f, top(pilha));
+    enqueue(f, top(pilha)); //coloca na fila o topo da pilha
+    //imprime(f);
     pop(pilha);
+    printf("\nEquacao pos fixada: ");
     imprimeTudo(f);
+    printf("\n");
 }
 
 int calculaResultado(fila *f, node *pilha){
-    char token[10];
-    char aux1[10], aux2[10];
+    char token;
+    char aux1, aux2, aux3;
     int primeiroOperando, segundoOperando, total;
-    int tamanho; //serve para verificar a ordem do número
-    int i=0, multiplicador=1; //contador para o for e divisor para a string
-    int primeiroTotal=0, segundoTotal=0; //servem para auxiliar a conversão das strings para números inteiros
     nodeInt *pilhaInt;
 
     pilhaInt = inicializaPilhaInt();
 
-    while(!filaVazia(f)){ //verifica se a fila não está vazia
-        strcpy(token, dequeue(f));
+    while(!filaVazia(f)){ //verifica se a fila nï¿½o estï¿½ vazia
+        token = dequeue(f);
         if(token != '*' && token != '/'  && token != '+' && token != '-' ){
             push(pilha, token);
-        }else{
-            printf("entra aqui");
+        }
+        else{
+            aux1 = top(pilha);
+            primeiroOperando = aux1 - '0';
+            pop(pilha);
 
-            if(!pilhaIntVazia(pilhaInt)){
-                primeiroOperando = topInt(pilhaInt);
-                }
-                else{
-                strcpy(aux1, top(pilha));
-                tamanho = strlen(aux1);
+            aux2 = top(pilha);
+            segundoOperando = aux2 - '0';
+            pop(pilha);
 
-                    for(i=tamanho; i>0; i--){
-                        primeiroTotal = primeiroTotal + ((aux1[i]-48)*multiplicador);
-                        multiplicador = multiplicador*10;
-                    }
-                    multiplicador = 1;
-                    i=0;
-                    primeiroOperando = primeiroTotal;
-                    primeiroTotal = 0;
-                    pop(pilha);
-            }
 
-            strcpy(aux2, top(pilha));
-            tamanho = strlen(aux2);
-                for(i=tamanho; i>0; i--){
-                    segundoTotal = segundoTotal + ((aux1[i]-48)*multiplicador);
-                    multiplicador = multiplicador*10;
-                }
-                multiplicador = 1;
-                i=0;
-                segundoOperando = segundoTotal;
-                segundoTotal = 0;
-                pop(pilha);
-
-            if(token == '+'){
-            total = segundoOperando + primeiroOperando;
+            if( token == '*' || token == '/' || token == '+' || token == '-' ){
+                switch(token){
+                    case '*':
+                        total = (segundoOperando*primeiroOperando);
+                        break;
+                    case '/':
+                        total = (segundoOperando/primeiroOperando);
+                        break;
+                    case '+':
+                        total = (segundoOperando+primeiroOperando);
+                        break;
+                    case '-':
+                        total = (segundoOperando-primeiroOperando);
+                        break;
             }
-            else if(token == '-'){
-                total = segundoOperando - primeiroOperando;     ///inverte os operandos pois é pós fixada a notação
-            }
-            else if(token == '*'){
-                total = segundoOperando * primeiroOperando;
-            }
-            else if(token == '/'){
-                total = segundoOperando / primeiroOperando;     ///inverte os operandos pois é pós fixada a notação
-            }
-
-            push(pilhaInt, total);
+            aux3 = total + '0';
+            push(pilha, aux3)
+            ;
             total = 0;
         }
     }
-    return (top(pilha));
+    }
+    return (top(pilha) - '0');
 }
-
 
 

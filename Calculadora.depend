@@ -1,0 +1,28 @@
+# depslib dependency file v1.0
+1431919413 source:c:\users\rodrigo\desktop\ufpel\3º semestre\ed1\calculadora\calculadora\fila.c
+	<stdio.h>
+	<stdlib.h>
+	"Fila.h"
+
+1431919498 c:\users\rodrigo\desktop\ufpel\3º semestre\ed1\calculadora\calculadora\fila.h
+	<stdio.h>
+	<stdlib.h>
+
+1432316446 source:c:\users\rodrigo\desktop\ufpel\3º semestre\ed1\calculadora\calculadora\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"FilaPilha.h"
+
+1431919656 c:\users\rodrigo\desktop\ufpel\3º semestre\ed1\calculadora\calculadora\pilha.h
+	<stdio.h>
+	<stdlib.h>
+	"Fila.h"
+
+1432315270 source:c:\users\rodrigo\desktop\ufpel\3º semestre\ed1\calculadora\calculadora\filapilha.c
+	<stdio.h>
+	<stdlib.h>
+	"FilaPilha.h"
+
+1432315270 c:\users\rodrigo\desktop\ufpel\3º semestre\ed1\calculadora\calculadora\filapilha.h
+
