@@ -17,6 +17,11 @@ typedef struct Fila{
     node *fim;
 }fila;
 
+typedef struct Nodeint{
+    int dado;
+    struct Nodeint *prox;
+}nodeInt;
+
 node* inicializaPilha(){
     node *p;
 
@@ -155,3 +160,62 @@ void imprimeTudo(fila* f){
     for (q=f->ini; q!=NULL; q=q->prox)
     printf("%c",q->dado);
 }
+
+///pilha de inteiros:
+
+nodeInt* inicializaPilhaInt(){
+    nodeInt *p;
+
+    p = (nodeInt*)malloc(sizeof(nodeInt));
+    if(!p){
+        return 0;
+    }
+    p->prox = NULL;
+    return p;
+}
+
+int pilhaIntVazia(nodeInt *pilha){
+    if(pilha == NULL)
+         return 1;
+    else
+        return 0;
+}
+
+void pushInt(nodeInt *p, int elemento){
+    nodeInt *novo;
+    novo = (nodeInt*)malloc(sizeof(node));
+
+    novo->dado = elemento;
+    novo->prox = NULL;
+
+    if(p->prox == NULL){
+        p->prox = novo;
+        return;
+    }
+    novo->prox = p->prox;
+    p->prox = novo;
+    return;
+}
+
+void popInt(nodeInt *p){
+    if(p->prox == NULL){
+        printf("\n A lista esta vazia!\n");
+        return;
+    }
+    nodeInt *temp1, *temp2;
+    int conteudo;
+    temp1 = p->prox;
+    conteudo = p->dado;
+    temp2 = temp1->prox;
+    free(temp1);
+    p->prox = temp2;
+}
+
+int topInt(nodeInt *p){
+    if(!p){
+        printf("\nPilha nao existe!\n");
+        return;
+    }
+    return p->prox->dado;
+}
+
