@@ -8,7 +8,7 @@
 	<stdio.h>
 	<stdlib.h>
 
-1432316446 source:c:\users\rodrigo\desktop\ufpel\3º semestre\ed1\calculadora\calculadora\main.c
+1432598281 source:c:\users\rodrigo\desktop\ufpel\3º semestre\ed1\calculadora\calculadora\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -19,7 +19,7 @@
 	<stdlib.h>
 	"Fila.h"
 
-1432315270 source:c:\users\rodrigo\desktop\ufpel\3º semestre\ed1\calculadora\calculadora\filapilha.c
+1432352084 source:c:\users\rodrigo\desktop\ufpel\3º semestre\ed1\calculadora\calculadora\filapilha.c
 	<stdio.h>
 	<stdlib.h>
 	"FilaPilha.h"

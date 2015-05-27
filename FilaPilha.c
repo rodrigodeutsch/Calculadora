@@ -56,7 +56,7 @@ void push(node *p, char elemento){
 
 void pop(node *p){
     if(p->prox == NULL){
-        printf("\n A lista esta vazia!\n");
+        //printf("\n A lista esta vazia!\n");
         return;
     }
     node *temp1, *temp2;
@@ -70,9 +70,9 @@ void pop(node *p){
 }
 
 char top(node *p){
-    if(!p){
-        printf("\nPilha nao existe!\n");
-        return;
+    if(p->prox == NULL){
+        //printf("\nPilha nao existe!\n");
+        return 0;
     }
     return p->prox->dado;
 }
@@ -91,7 +91,7 @@ nodeInt* inicializaPilhaInt(){
 }
 
 int pilhaIntVazia(nodeInt *pilha){
-    if(pilha == NULL)
+    if(pilha->prox == NULL)
          return 1;
     else
         return 0;
